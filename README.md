@@ -28,7 +28,7 @@ without needing to click each and every option.
 ## Installation
 
 ```bash
-pip install streamlit-capsules
+pip install streamlit-capsules (soon™)
 ```
 
 ## Usage
