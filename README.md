@@ -1,5 +1,8 @@
+### WIP! do not try this at home!
+
 > [!IMPORTANT]  
-> This component is deprecated. It's now available in Streamlit itself via `st.pills`, see [docs](https://docs.streamlit.io/develop/api-reference/widgets/st.pills). This component will not be updated anymore. 
+> This was forked from jrieke's streamlit-pills.
+> Streamlit already includes this functionality via `st.pills` (see [docs](https://docs.streamlit.io/develop/api-reference/widgets/st.pills)), but this component adds a Select All button — that’s the key difference.
 
 # streamlit-pills 💊
 
