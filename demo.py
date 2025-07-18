@@ -10,6 +10,7 @@ st.write(
 )
 
 "# Demo for [streamlit-capsules](https://github.com/gRodrigues03/streamlit-capsules)"
+"based on [streamlit-pills](https://github.com/jrieke/streamlit-pills) by [jrieke](https://github.com/jrieke)"
 "## Example"
 
 options = [
@@ -54,9 +55,10 @@ icons = [
     "📦",
 ]
 
-selected = capsules("Select a category", options, default='3D', icons=icons, selection_mode='single')
+"default options: ['3D', 'Authentication']"
+
+selected = capsules("Select a category", options, default=['3D', 'Authentication'], icons=icons, selection_mode='multi')
 st.write("You selected:", selected)
-selected = st.pills("Select a category", options, selection_mode='multi')
 
 "## API reference"
 st.help(capsules)
