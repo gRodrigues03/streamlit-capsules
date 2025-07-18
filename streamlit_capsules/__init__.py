@@ -22,6 +22,8 @@ def capsules(
     label_visibility: str = "visible",
     clearable: bool = None,
     selection_mode: Literal['single', 'multi'] ='single',
+    show_selectall: bool = None,
+    select_all_labels: Iterable[str]=None,
     key: str = None,
 ):
     """Shows clickable capsules.
@@ -32,24 +34,30 @@ def capsules(
         icons (iterable of str, optional): The emoji icons shown on the left side of the
             capsules. Each item must be a single emoji. Default to None.
         default (list, str or None, optional): The value or list of values that are selected by default.
-            If None, no pill is selected. Defaults to None.
-        format_func (callable, optional): A function that is applied to the pill text 
+            If None, no capsule is selected. Defaults to None.
+        format_func (callable, optional): A function that is applied to the capsule text
             before rendering. Defaults to None.
         label_visibility ("visible" or "hidden" or "collapsed", optional): The visibility 
             of the label. Use this instead of `label=""` for accessibility. Defaults to 
             "visible".
-        clearable (bool, optional): Whether the user can unselect the selected pill by
+        clearable (bool, optional): Whether the user can unselect the selected capsule by
             clicking on it. If None, this is possible if `index` is set to None.
             Defaults to None.
+        selection_mode ("single" | "multi"): Defines whether the widget allows selecting one or multiple options.
+            Defaults to "single".
+        select_all_labels (list, optional): Labels for the select and de-select all buttons.
+            Index 0 is used for the Select All button and index 1 is used for the De-select All button.
         key (str, optional): The key of the component. Defaults to None.
 
     Returns:
-        (any): The text of the pill selected by the user (same value as in `options`).
+        (any): The text of the capsule selected by the user (same value as in `options`).
     """
 
     # Do some checks to verify the input.
     if len(options) < 1:
         raise ValueError("At least one option must be passed but `options` is empty.")
+    if select_all_labels is not None and len(select_all_labels) != 2:
+            raise ValueError(f"Argument 'select_all_labels' should be 2 elements long, but it is {select_all_labels}")
     if icons is not None and len(options) != len(icons):
         raise ValueError(
             "The number of options and icons must be equal but `options` has "
@@ -87,9 +95,11 @@ def capsules(
         label_visibility=label_visibility,
         clearable=clearable,
         selection_mode=selection_mode,
+        show_selectall=show_selectall,
+        select_all_labels=select_all_labels,
         key=key,
     )
 
-    # The frontend component returns the index of the selected pill but we want to
+    # The frontend component returns the index of the selected capsule but we want to
     # return the actual value of it.
     return component_value

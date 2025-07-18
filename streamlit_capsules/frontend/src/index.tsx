@@ -31,9 +31,9 @@ function onRender(event: Event): void {
   let icons = data.args["icons"]
   let label_visibility = data.args["label_visibility"]
   let clearable = data.args["clearable"]
-  const select_text = data.args["select_text"] || ['Select All', 'Deselect All']
+  const select_text = data.args["select_all_labels"] || ['Select All', 'Deselect All']
   const default_values = data.args["default"]
-
+  const show_select_all = data.args["show_selectall"] || true
   if (label_visibility === "hidden") {
     labelDiv.style.visibility = "hidden"
   }
@@ -50,6 +50,7 @@ function onRender(event: Event): void {
     const selectionMode = data.args["selection_mode"]
     if (selectionMode === "multi") {
       selectAllBtn = container.appendChild(document.createElement("button"))
+      if (!show_select_all) { selectAllBtn.style.display = "none" }
       if (options.length === default_values.length) {
         selectAllBtn.textContent = select_text[1]
         selectAllBtn.classList.add("selected")
@@ -72,7 +73,6 @@ function onRender(event: Event): void {
           })
           selectedItems = options
           selectAllBtn.textContent = select_text[1]
-          console.log(selectAllBtn)
           Streamlit.setComponentValue(selectedItems)
         }
       }
@@ -136,7 +136,7 @@ function onRender(event: Event): void {
           // Gather all selected indices
           selectedItems = Array.from(container.querySelectorAll(".option.selected"))
               .map(el => options[Array.from(container.children).indexOf(el) - 1])
-          if (selectedItems.length == options.length) {selectAllBtn.textContent = select_text[1]; selectAllBtn.classList.add("selected") }
+          if (selectedItems.length === options.length) {selectAllBtn.textContent = select_text[1]; selectAllBtn.classList.add("selected") }
           else {selectAllBtn.textContent = select_text[0]; selectAllBtn.classList.remove("selected") }
           Streamlit.setComponentValue(selectedItems)
         }
@@ -150,8 +150,6 @@ function onRender(event: Event): void {
     document.documentElement.style.setProperty('--border-color', adjustOpacity(data.theme.textColor, 0.2))
     document.documentElement.style.setProperty('--selected', adjustOpacity(data.theme.primaryColor, 0.1))
     document.documentElement.style.setProperty('--hover-selected', adjustOpacity(data.theme.primaryColor, 0.2))
-
-    console.log(data.theme)
   }
 
   // We tell Streamlit to update our frameHeight after each render event, in
