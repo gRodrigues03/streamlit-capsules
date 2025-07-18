@@ -1,15 +1,15 @@
 import streamlit as st
 
-from streamlit_pills import pills
+from streamlit_capsules import capsules
 
-st.set_page_config("Demo for streamlit-pills", "💊")
-st.warning("This component is deprecated. It's now available in Streamlit itself via st.pills, see docs. This component will not be updated anymore.")
+st.set_page_config("Demo for streamlit-capsules", "💊")
+#st.warning("This component is deprecated. It's now available in Streamlit itself via st.pills, see docs. This component will not be updated anymore.")
 st.write(
     f'<span style="font-size: 78px; line-height: 1">💊</span>',
     unsafe_allow_html=True,
 )
 
-"# Demo for [streamlit-pills](https://github.com/jrieke/streamlit-pills)"
+"# Demo for [streamlit-capsules](https://github.com/gRodrigues03/streamlit-capsules)"
 "## Example"
 
 options = [
@@ -54,8 +54,9 @@ icons = [
     "📦",
 ]
 
-selected = pills("Select a category", options, icons)
+selected = capsules("Select a category", options, default='3D', icons=icons, selection_mode='single')
 st.write("You selected:", selected)
+selected = st.pills("Select a category", options, selection_mode='multi')
 
 "## API reference"
-st.help(pills)
+st.help(capsules)

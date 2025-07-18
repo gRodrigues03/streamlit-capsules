@@ -4,7 +4,7 @@
 > This was forked from jrieke's streamlit-pills.
 > Streamlit already includes this functionality via `st.pills` (see [docs](https://docs.streamlit.io/develop/api-reference/widgets/st.pills)), but this component adds a Select All button — that’s the key difference.
 
-# streamlit-pills 💊
+# streamlit-capsules 💊
 
 [![PyPI](https://img.shields.io/pypi/v/streamlit-pills)](https://pypi.org/project/streamlit-pills/)
 
@@ -36,7 +36,8 @@ pip install streamlit-pills
 ## Usage
 
 ```python
-from streamlit_pills import pills
+from streamlit_capsules import pills
+
 selected = pills("Label", ["Option 1", "Option 2", "Option 3"], ["🍀", "🎈", "🌈"])
 st.write(selected)
 ```

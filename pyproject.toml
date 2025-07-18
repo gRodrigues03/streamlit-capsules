@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "streamlit-pills"
+name = "streamlit-capsules"
 version = "0.3.0"
-description = "💊 A Streamlit component to show clickable pills/badges"
+description = "💊 A Streamlit component to show clickable capsules/pills"
 authors = ["Johannes Rieke <johannes.rieke@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 # This is required so the frontend code is properly included in the wheel. 
-include = ["streamlit_pills/frontend/build/**/*"]
+include = ["streamlit_capsules/frontend/build/**/*"]
 
 [tool.poetry.dependencies]
 python = "!=3.9.7,>=3.8"

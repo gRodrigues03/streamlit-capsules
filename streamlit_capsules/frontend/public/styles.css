@@ -13,8 +13,9 @@ body {
 }
 
 label {
+    font: var(--font);
     font-size: 14px;
-    color: rgb(49, 51, 63);
+    color: var(--text-color);
     margin-bottom: 0.5rem;
     height: auto;
     min-height: 1.5rem;
@@ -34,42 +35,49 @@ label {
     padding-bottom: 0.25rem; /* fix issue with element getting cut off */
 }
 
-.pill {
-    background: #fff;
-    border: 1px solid #D6D6D8;
-    border-radius: 1rem;
-    padding: 0.1rem 0.5rem;
-    font-size: 14px;
+.capsule {
+    display: inline-flex;
+    -moz-box-align: center;
+    align-items: center;
+    -moz-box-pack: center;
+    justify-content: center;
+    margin: 0;
+    text-transform: none;
+    font-family: inherit;
+    color: inherit;
+    width: auto;
+    cursor: pointer;
+    user-select: none;
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+    font-size: 0.875rem;
+    line-height: 1.6;
     font-weight: 400;
+    height: 2rem;
+    min-height: 2rem;
+    max-width: 736px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
 }
 
-.pill:hover, .pill.dark:hover {
+.capsule:hover {
     border-color: var(--primary-color);
-    /* border-color: #BEC5D3; */
     cursor: pointer;
     color: var(--primary-color)
 }
 
-.pill.selected, .pill.dark.selected {
-    background: var(--primary-color);
+.capsule.selected {
+    background-color: var(--selected);
     border-color: var(--primary-color);
-    /* border-color: #808495; */
-    /* color: #FAFAFA; */
-    color: #FFF;
+    color: var(--primary-color);
 }
 
-.pill.dark {
-    /* background: #31333F; */
-    /* border-color: #31333F; */
-    background: #131720;
-    border-color: #42444C;
-    color: #FAFAFA;
+.capsule.selected:hover {
+    background-color: var(--hover-selected);
 }
-
-/* .pill.dark:hover {
-    border-color: #555867;
-    cursor: pointer;
-} */
 
 .icon {
     font-size: 10px;

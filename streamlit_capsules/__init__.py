@@ -1,37 +1,38 @@
 from pathlib import Path
-from typing import Iterable, Union, Callable
+from typing import Iterable, Union, Callable, Literal
 
 import streamlit.components.v1 as components
 
 _RELEASE = True
 
 if not _RELEASE:
-    _component_func = components.declare_component("pills", url="http://localhost:3001")
+    _component_func = components.declare_component("capsules", url="http://localhost:3001")
 else:
     path = (Path(__file__).parent / "frontend" / "build").resolve()
-    _component_func = components.declare_component("pills", path=path)
+    _component_func = components.declare_component("capsules", path=path)
 
 
-def pills(
+def capsules(
     label: str,
     options: Iterable[str],
     icons: Iterable[str] = None,
-    index: Union[int, None] = 0,
+    default: Iterable[str] | str=(),
     *,
     format_func: Callable = None,
     label_visibility: str = "visible",
     clearable: bool = None,
+    selection_mode: Literal['single', 'multi'] ='single',
     key: str = None,
 ):
-    """Shows clickable pills.
+    """Shows clickable capsules.
 
     Args:
-        label (str): The label shown above the pills.
-        options (iterable of str): The texts shown inside of the pills.
+        label (str): The label shown above the capsules.
+        options (iterable of str): The texts shown inside of the capsules.
         icons (iterable of str, optional): The emoji icons shown on the left side of the
-            pills. Each item must be a single emoji. Default to None.
-        index (int or None, optional): The index of the pill that is selected by default.
-            If None, no pill is selected. Defaults to 0.
+            capsules. Each item must be a single emoji. Default to None.
+        default (list, str or None, optional): The value or list of values that are selected by default.
+            If None, no pill is selected. Defaults to None.
         format_func (callable, optional): A function that is applied to the pill text 
             before rendering. Defaults to None.
         label_visibility ("visible" or "hidden" or "collapsed", optional): The visibility 
@@ -54,20 +55,22 @@ def pills(
             "The number of options and icons must be equal but `options` has "
             f"{len(options)} elements and `icons` has {len(icons)} elements."
         )
-    if index is not None and index >= len(options):
+    # TODO: Handle invalid defaults.
+    if isinstance(default, str) and default not in options:
         raise ValueError(
-            f"`index` must be smaller than the number of options ({len(options)}) "
-            f"but it is {index}."
+            f"The default value '{default}' is not included in the options."
         )
+#     if index is not None and index >= len(options):
+#         raise ValueError(
+#             f"`index` must be smaller than the number of options ({len(options)}) "
+#             f"but it is {index}."
+#         )
     if label_visibility not in ["visible", "hidden", "collapsed"]:
         raise ValueError(
             f"`label_visibility` must be one of 'visible', 'hidden' or 'collapsed' "
             f"but it is {label_visibility}."
         )
     # TODO: Verify that icons are actually emoji icons.
-
-    if clearable is None and index is None:
-        clearable = True
         
     if format_func:
         formatted_options = [format_func(option) for option in options]
@@ -79,16 +82,14 @@ def pills(
         label=label,
         options=formatted_options,
         icons=icons,
-        index=index,
+        default=default,
+        value=default,
         label_visibility=label_visibility,
         clearable=clearable,
+        selection_mode=selection_mode,
         key=key,
-        default=index,
     )
 
     # The frontend component returns the index of the selected pill but we want to
     # return the actual value of it.
-    if component_value is None or component_value == "None":
-        return None
-    else:
-        return options[component_value]
+    return component_value
