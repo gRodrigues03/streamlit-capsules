@@ -5,6 +5,7 @@ const label = labelDiv.appendChild(document.createTextNode(""))
 let container = document.body.appendChild(document.createElement("div"))
 container.classList.add("container")
 let options: string[] = []
+let defaultOptions: string[] = []
 let selectedItems: string[] = []
 let selectedItem: string | null = null
 
@@ -38,9 +39,19 @@ function onRender(event: Event): void {
   if (!arraysEqual(data.args['options'], options) && options.length > 0) {
     container.innerHTML = ""
 
+    // set the selected values to be the default if the default also changed
+    if (!arraysEqual(data.args['default'], defaultOptions) && defaultOptions.length > 0) {
+      if (data.args["selection_mode"] === 'single'){
+        selectedItem = data.args["default"]
+        Streamlit.setComponentValue(selectedItem)
+      } else{
+        selectedItems = data.args["default"].filter((item: string) => data.args["options"].includes(item))
+        Streamlit.setComponentValue(selectedItems)
+      }
+    }
 
-    // filter selectedItems to have only what's in options and then update the component's value
-    if (data.args["selection_mode"] === 'single'){
+    // else, filter selectedItems to have only what's in options and then update the component's value
+    else if (data.args["selection_mode"] === 'single'){
       selectedItem = data.args["options"].includes(selectedItem) ? selectedItem : null
       Streamlit.setComponentValue(selectedItem)
     } else{
@@ -57,7 +68,7 @@ function onRender(event: Event): void {
   let label_visibility = data.args["label_visibility"]
   let clearable = data.args["clearable"]
   const select_text = data.args["select_all_labels"] || ['Select All', 'Deselect All']
-  const default_values = data.args["default"]
+  defaultOptions = data.args["default"] || []
   const show_select_all = data.args["show_select_all"]
   if (label_visibility === "hidden") {
     labelDiv.style.visibility = "hidden"
@@ -74,7 +85,7 @@ function onRender(event: Event): void {
     if (selectionMode === "multi") {
       selectAllBtn = container.appendChild(document.createElement("button"))
       if (!show_select_all) { selectAllBtn.style.display = "none" }
-      if (options.length === default_values.length) {
+      if (options.length === defaultOptions.length || options.length === selectedItems.length) {
         selectAllBtn.textContent = select_text[1]
         selectAllBtn.classList.add("selected")
       } else {
@@ -104,8 +115,8 @@ function onRender(event: Event): void {
         }
       }
     }
-    const compare_basis_multi = selectedItems.length === 0 ? default_values : selectedItems
-    const compare_basis = selectedItem || default_values
+    const compare_basis_multi = selectedItems.length === 0 ? defaultOptions : selectedItems
+    const compare_basis = selectedItem || defaultOptions
     options.forEach((option: string, i: number) => {
       let capsule = container.appendChild(document.createElement("div"))
       capsule.classList.add("capsule", "option")

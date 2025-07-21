@@ -113,7 +113,9 @@ cd streamlit_capsules/frontend
 npm run build
 ```
 
-After this has finished, build and upload the package to PyPI:
+After this has finished, build and upload the package to PyPI
+
+(soon™)
 
 ```bash
 cd ../..
@@ -122,6 +124,12 @@ poetry publish
 ```
 
 ## Changelog
+
+### 0.5.1 (July 21, 2025)
+* Better state handling and new priority order for updating the selected items.
+  1. **Defaults** — if the defaults have changed, they take precedence.
+  2. **Previously selected items** — retained if still present in the new options.
+  3. **New options** — any remaining items from from the updated options.
 
 ### 0.5.0 (July 21, 2025)
 - Fixed select all button not being highlighted correctly.
