@@ -5,6 +5,8 @@ const label = labelDiv.appendChild(document.createTextNode(""))
 let container = document.body.appendChild(document.createElement("div"))
 container.classList.add("container")
 let options: string[] = []
+let selectedItems: string[] = []
+let selectedItem: string | null = null
 
 
 function adjustOpacity(color: string, opacity: number): string {
@@ -33,7 +35,20 @@ function onRender(event: Event): void {
 
   // reset the container if the options passed to the component have changed
   // in between reruns (without changing the key)
-  if (!arraysEqual(data.args['options'], options)) { container.innerHTML = "" }
+  if (!arraysEqual(data.args['options'], options) && options.length > 0) {
+    container.innerHTML = ""
+
+
+    // filter selectedItems to have only what's in options and then update the component's value
+    if (data.args["selection_mode"] === 'single'){
+      selectedItem = data.args["options"].includes(selectedItem) ? selectedItem : null
+      Streamlit.setComponentValue(selectedItem)
+    } else{
+      selectedItems = selectedItems.filter(item => data.args["options"].includes(item))
+      Streamlit.setComponentValue(selectedItems)
+    }
+
+  }
 
   options = data.args["options"]
 
@@ -53,8 +68,6 @@ function onRender(event: Event): void {
 
   if (container.childNodes.length === 0) {
     let selectAllBtn: HTMLButtonElement
-    let selectedItems: string[]
-    let selectedItem: string | null = null
 
     // Add Select All if in multi mode
     const selectionMode = data.args["selection_mode"]
@@ -91,21 +104,21 @@ function onRender(event: Event): void {
         }
       }
     }
-
+    const compare_basis_multi = selectedItems.length === 0 ? default_values : selectedItems
+    const compare_basis = selectedItem || default_values
     options.forEach((option: string, i: number) => {
       let capsule = container.appendChild(document.createElement("div"))
-      capsule.classList.add("capsule")
-      capsule.classList.add("option")
+      capsule.classList.add("capsule", "option")
       if (data.args["selection_mode"] === 'single') {
-        if (default_values === option) {
+        if (compare_basis === option) {
           capsule.classList.add("selected")
+          selectedItem = option
         }
       } else {
-        if (default_values.includes(option)) {
+        if (compare_basis_multi.includes(option)) {
           capsule.classList.add("selected")
         }
       }
-
 
       if (icons) {
         let icon_span = capsule.appendChild(document.createElement("span"))
@@ -114,10 +127,6 @@ function onRender(event: Event): void {
       }
 
       capsule.appendChild(document.createTextNode(option))
-
-      // if (i === index) {
-      //   capsule.classList.add("selected")
-      // }
 
       capsule.onclick = function () {
         const selectionMode = data.args["selection_mode"]

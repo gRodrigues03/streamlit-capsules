@@ -16,7 +16,7 @@ def capsules(
     label: str,
     options: Iterable[str],
     icons: Iterable[str] = None,
-    default: Iterable[str] | str=(),
+    default: Iterable[str] | str = None,
     *,
     format_func: Callable = None,
     label_visibility: str = "visible",
@@ -52,7 +52,7 @@ def capsules(
         key (str, optional): The key of the component. Defaults to None.
 
     Returns:
-        (any): The text of the capsule selected by the user (same value as in `options`).
+        (list, str or None): The text or list of text of the capsules selected by the user (same value as in `options`).
     """
 
     # Do some checks to verify the input.
@@ -87,6 +87,11 @@ def capsules(
     else:
         formatted_options = options
 
+    # Change the default value this function returns before the component mounts
+    # this is possible and necessary because we already know what it'll be beforehand.
+    if default is None and selection_mode == 'multi':
+            default = []
+
     # Pass everything to the frontend.
     component_value = _component_func(
         label=label,
@@ -101,7 +106,4 @@ def capsules(
         select_all_labels=select_all_labels,
         key=key,
     )
-
-    # The frontend component returns the index of the selected capsule but we want to
-    # return the actual value of it.
     return component_value
