@@ -22,7 +22,7 @@ def capsules(
     label_visibility: str = "visible",
     clearable: bool = None,
     selection_mode: Literal['single', 'multi'] ='single',
-    show_selectall: bool = None,
+    show_select_all: bool = True,
     select_all_labels: Iterable[str]=None,
     key: str = None,
 ):
@@ -45,6 +45,8 @@ def capsules(
             Defaults to None.
         selection_mode ("single" | "multi"): Defines whether the widget allows selecting one or multiple options.
             Defaults to "single".
+        show_select_all (bool, optional):  Defines whether the Select/De-select All button is shown.
+            Defaults to True.
         select_all_labels (list, optional): Labels for the select and de-select all buttons.
             Index 0 is used for the Select All button and index 1 is used for the De-select All button.
         key (str, optional): The key of the component. Defaults to None.
@@ -95,7 +97,7 @@ def capsules(
         label_visibility=label_visibility,
         clearable=clearable,
         selection_mode=selection_mode,
-        show_selectall=show_selectall,
+        show_select_all=show_select_all,
         select_all_labels=select_all_labels,
         key=key,
     )

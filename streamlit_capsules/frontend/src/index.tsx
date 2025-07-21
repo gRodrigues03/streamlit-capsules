@@ -2,8 +2,9 @@ import { Streamlit, RenderData } from "streamlit-component-lib"
 
 const labelDiv = document.body.appendChild(document.createElement("label"))
 const label = labelDiv.appendChild(document.createTextNode(""))
-const container = document.body.appendChild(document.createElement("div"))
+let container = document.body.appendChild(document.createElement("div"))
 container.classList.add("container")
+let options: string[] = []
 
 
 function adjustOpacity(color: string, opacity: number): string {
@@ -16,6 +17,10 @@ function adjustOpacity(color: string, opacity: number): string {
   return `rgba(${r}, ${g}, ${b}, ${opacity})`
 }
 
+function arraysEqual<T>(a: T[], b: T[]): boolean {
+  if (a.length !== b.length) return false;
+  return a.every((value, index) => value === b[index]);
+}
 
 /**
  * The component's render function. This will be called immediately after
@@ -26,14 +31,19 @@ function onRender(event: Event): void {
   // Get the RenderData from the event
   const data = (event as CustomEvent<RenderData>).detail
 
+  // reset the container if the options passed to the component have changed
+  // in between reruns (without changing the key)
+  if (!arraysEqual(data.args['options'], options)) { container.innerHTML = "" }
+
+  options = data.args["options"]
+
   label.textContent = data.args["label"]
-  let options = data.args["options"]
   let icons = data.args["icons"]
   let label_visibility = data.args["label_visibility"]
   let clearable = data.args["clearable"]
   const select_text = data.args["select_all_labels"] || ['Select All', 'Deselect All']
   const default_values = data.args["default"]
-  const show_select_all = data.args["show_selectall"] || true
+  const show_select_all = data.args["show_select_all"]
   if (label_visibility === "hidden") {
     labelDiv.style.visibility = "hidden"
   }
@@ -43,7 +53,7 @@ function onRender(event: Event): void {
 
   if (container.childNodes.length === 0) {
     let selectAllBtn: HTMLButtonElement
-    let selectedItems: number[]
+    let selectedItems: string[]
     let selectedItem: string | null = null
 
     // Add Select All if in multi mode
@@ -68,6 +78,7 @@ function onRender(event: Event): void {
           selectAllBtn.classList.remove("selected")
           selectAllBtn.textContent = select_text[0]
           Streamlit.setComponentValue(selectedItems)
+          Streamlit.setFrameHeight()
         } else {
           container.querySelectorAll(".capsule").forEach((capsuleEl) => {
             capsuleEl.classList.add("selected")
@@ -76,6 +87,7 @@ function onRender(event: Event): void {
           selectAllBtn.classList.add("selected")
           selectAllBtn.textContent = select_text[1]
           Streamlit.setComponentValue(selectedItems)
+          Streamlit.setFrameHeight()
         }
       }
     }
@@ -141,6 +153,7 @@ function onRender(event: Event): void {
           if (selectedItems.length === options.length) {selectAllBtn.textContent = select_text[1]; selectAllBtn.classList.add("selected") }
           else {selectAllBtn.textContent = select_text[0]; selectAllBtn.classList.remove("selected") }
           Streamlit.setComponentValue(selectedItems)
+          Streamlit.setFrameHeight()
         }
       }
     })
