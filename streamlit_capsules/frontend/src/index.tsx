@@ -65,13 +65,15 @@ function onRender(event: Event): void {
             capsuleEl.classList.remove("selected")
           })
           selectedItems = []
-          Streamlit.setComponentValue(selectedItems)
+          selectAllBtn.classList.remove("selected")
           selectAllBtn.textContent = select_text[0]
+          Streamlit.setComponentValue(selectedItems)
         } else {
           container.querySelectorAll(".capsule").forEach((capsuleEl) => {
             capsuleEl.classList.add("selected")
           })
           selectedItems = options
+          selectAllBtn.classList.add("selected")
           selectAllBtn.textContent = select_text[1]
           Streamlit.setComponentValue(selectedItems)
         }
