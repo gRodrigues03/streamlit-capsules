@@ -123,6 +123,18 @@ poetry publish
 
 ## Changelog
 
+### 0.5.0 (July 21, 2025)
+- Fixed select all button not being highlighted correctly.
+- Updating the options without updating the component's key is now possible.
+    (might break the return value of previously selected items, needs testing)
+
+### 0.4.0 (July 18, 2025)
+- Updated visuals to be dynamic and on par with current st.pills style.
+- Backported "multi" selection_mode from st.pills.
+- Added the option to show a select all button. (defaults to true)
+- Added option to change the text in the select all button.
+- Changed the return type from an index to a selected item or a list of selected items.
+
 ### 0.3.0 (November 22, 2022)
 - Added `label_visibility` parameter to hide the label.
 
